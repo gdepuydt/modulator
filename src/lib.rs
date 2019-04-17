@@ -376,11 +376,38 @@
 //!
 //! Copyright© 2018 Ready At Dawn Studios
 
+extern crate cfg_if;
+extern crate wasm_bindgen;
+
+mod utils;
+
+use cfg_if::cfg_if;
+use wasm_bindgen::prelude::*;
 use std::any::Any;
 use std::collections::HashMap;
 use std::time::Duration;
 
+cfg_if! {
+    // When the `wee_alloc` feature is enabled, use `wee_alloc` as the global
+    // allocator.
+    if #[cfg(feature = "wee_alloc")] {
+        extern crate wee_alloc;
+        #[global_allocator]
+        static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
+    }
+}
+
 pub mod sources;
+
+#[wasm_bindgen]
+extern {
+    fn alert(s: &str);
+}
+
+#[wasm_bindgen]
+pub fn greet() {
+    alert("Hello, wasm-game-of-life!");
+}
 
 /// Modulators provide animated modulation. T is the generic type of the modulator value.
 pub trait Modulator<T> {
