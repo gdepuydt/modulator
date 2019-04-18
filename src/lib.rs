@@ -437,6 +437,7 @@ pub trait Modulator<T> {
 }
 
 /// A host for modulators, homogeneous in type T for the value of its modulators
+#[wasm_bindgen]
 #[derive(Default)]
 pub struct ModulatorEnv<T> {
     mods: HashMap<String, Box<dyn Modulator<T>>>, // live modulators

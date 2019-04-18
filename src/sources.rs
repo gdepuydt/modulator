@@ -6,6 +6,7 @@
 //! Copyright© 2018 Ready At Dawn Studios
 
 extern crate rand;
+extern crate wasm_bindgen;
 
 use sources::rand::prelude::*;
 use std::any::Any;
@@ -13,11 +14,13 @@ use std::f32;
 
 use Modulator;
 use ModulatorEnv;
+use wasm_bindgen::prelude::*;
 
 ///
 /// Simple modulator using a value closure/`Fn`, with frequency and amplitude. The
 /// closure receives self, elapsed time (in seconds) and returns a new value.
 //
+#[wasm_bindgen]
 pub struct Wave {
     pub amplitude: f32,
     pub frequency: f32,
@@ -98,7 +101,7 @@ impl Modulator<f32> for Wave {
 /// If overshooting is desired, positive values of `undamp` can be set to add artificial
 /// overshoot/oscillations around the goal.
 ///
-
+#[wasm_bindgen]
 pub struct ScalarSpring {
     pub smooth: f32, // spring delay (smoothing), in seconds
     pub undamp: f32, // artificial undamping (adds overshoot)
@@ -207,7 +210,8 @@ impl Modulator<f32> for ScalarSpring {
 /// type that is unable to pursue and arrive to its given `goal` is, of course, never going
 /// to satisfy the conditions for arrival.
 ///
-
+/// 
+#[wasm_bindgen]
 pub struct ScalarGoalFollower {
     pub regions: Vec<[f32; 2]>, // set of regions to pick goals from
     pub random_region: bool,    //  cycle regions randomly instead of sequentially
@@ -225,6 +229,7 @@ pub struct ScalarGoalFollower {
 
     pub enabled: bool, // enabling toggle
 }
+
 
 impl ScalarGoalFollower {
     /// Make a scalar goal follower
@@ -369,7 +374,8 @@ impl Modulator<f32> for ScalarGoalFollower {
 /// much as it it can while ensuring that it will decelerate and come to a stop (0 speed)
 /// exactly at `goal`.
 ///
-
+///
+#[wasm_bindgen]
 pub struct Newtonian {
     pub speed_limit: [f32; 2], // max speed range, selected on new goal
 
@@ -580,6 +586,7 @@ impl Modulator<f32> for Newtonian {
 /// enough odds), but still evolves over time in an organic way.
 ///
 
+#[wasm_bindgen]
 pub struct ShiftRegister {
     pub buckets: Vec<f32>, // current array of values
     pub ages: Vec<u32>,    // symmetrical array of value ages (number of periods since updating)
